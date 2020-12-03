@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="../Scripts/jquery-1.10.2.js"></script>
+    <script src="../Scripts/bootstrap.js"></script>
+    <script src="../Scripts/respond.js"></script>
+    <link href="../Content/bootstrap.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body ng-app="apiApp">
+    
+    <div class="container" ng-controller="whoAmIController" ng-init="Init()">
+        <br />
+        <input type="button" value="Reload Page" ng-click="Init()" />
+        <h2>Who Am I</h2>
+        
+        <div>
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <td>Name</td>
+                    <td>Gender</td>
+                    <td>city</td>
+                    <td>State</td>
+                    <td>Country</td>
+                    <td>Postcode</td>
+                    <td>Email</td>
+                    <td>Phone</td>
+                </tr>
+                <tr ng-repeat="activity in Activity.results">
+                    <td>{{activity.name.title}} {{ activity.name.first +','+ activity.name.last}}</td>
+                    <td>{{activity.gender}}</td>
+                    <td>{{activity.location.city}}</td>
+                    <td>{{activity.location.state}}</td>
+                    <td>{{activity.location.country}}</td>
+                    <td>{{activity.location.postcode}}</td>
+                    <td>{{activity.email}}</td>
+                    <td>{{activity.phone}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        var app = angular.module('apiApp', []);
+
+        app.controller('whoAmIController', function ($scope, $http) {
+            $scope.Activity = [];
+            $scope.Init = function() {
+                $scope.WhoAmI();
+            };
+
+            $scope.WhoAmI = function () {
+                $http({
+                    method: "GET",
+                    url: "https://randomuser.me/api/?results=10"
+                }).then(
+
+                        function mySuccess(response) {
+                            //alert('Success');
+                            console.log(response.data);
+                            $scope.Activity = response.data;
+                        },
+
+                        function myError(response) {
+                            $scope.myWelcome = response.statusText;
+                        });
+            };
+        });
+    </script>
+</body>
+</html>
